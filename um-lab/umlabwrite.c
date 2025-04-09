@@ -13,12 +13,17 @@ extern void cmov1_test(Seq_T stream);
 
 extern void build_halt_test(Seq_T instructions);
 extern void build_verbose_halt_test(Seq_T instructions);
-extern void print_test(Seq_T stream);
+extern void add_test(Seq_T stream);
+extern void test_sstore(Seq_T stream);
+extern void test_sload(Seq_T stream);
+
 extern void activate_test(Seq_T stream);
+extern void inactivate_test(Seq_T stream);
 extern void seg_test(Seq_T stream);
 extern void multiply_test(Seq_T stream);
 extern void divide_test(Seq_T stream);
 extern void nand_test(Seq_T stream);
+extern void arith_test(Seq_T stream);
 
 
 /* The array `tests` contains all unit tests for the lab. */
@@ -32,14 +37,19 @@ static struct test_info {
 } tests[] = {
         { "halt",         NULL, "", build_halt_test },
         { "halt-verbose", NULL, "", build_verbose_halt_test },
-        { "print-six",    NULL, "6", print_test },
+        { "print-six",    NULL, "6", add_test },
         { "cmove0",       NULL, ":", cmov0_test },
         { "cmove1",       NULL, ";", cmov1_test },
         { "activate",     NULL, ";", activate_test }, 
         { "seg",          NULL, ":", seg_test }, 
         { "multiply",     NULL, "8", multiply_test },
         { "divide",       NULL, "!", divide_test },
-        { "nand",         NULL, "!", nand_test }
+        { "nand",         NULL, "!", nand_test },
+        { "inactivate",   NULL, "B", inactivate_test },
+        { "arith",        NULL, "c!$!", arith_test},
+        { "sstore",       NULL, "",  test_sstore},
+        { "sload",        NULL, "A", test_sload}
+
 };
 
   

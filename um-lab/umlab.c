@@ -136,50 +136,23 @@ void Um_write_sequence(FILE *output, Seq_T stream)
 }
 
 
+
 /* Unit tests for the UM */
 
-void cmov0_test(Seq_T stream)
-{
-        append(stream, loadval(r1, 58));
-        append(stream, loadval(r2, 2));
-        append(stream, loadval(r3, 0));
-        append(stream, conditional_move(r1, r2, r3));
-        append(stream, output(r1));
-        append(stream, halt());
-}
-void cmov1_test(Seq_T stream)
-{
-        append(stream, loadval(r1, 58));
-        append(stream, loadval(r2, 59));
-        append(stream, loadval(r3, 1));
-        append(stream, conditional_move(r1, r2, r3));
-        append(stream, output(r1));
-        append(stream, halt());
-}
-void activate_test(Seq_T stream)
-{
-        append(stream, loadval(r3, 10));
-        append(stream, activate(r2, r3));
-        append(stream, loadval(r1, 58));
-        append(stream, add(r1, r1, r2));
-        append(stream, output(r1));
-        append(stream, halt());
-}
-void seg_test(Seq_T stream)
-{
-        append(stream, loadval(r1, 58));
-        append(stream, loadval(r3, 10));
-        append(stream, activate(r2, r3));
-        append(stream, sstore(r2, r2, r1));
-        append(stream, sload(r2, r2, r2));
-        append(stream, output(r2));
-        append(stream, halt());
-}
+/* test only halt */ 
 void build_halt_test(Seq_T stream)
 {
         append(stream, halt());
 }
+/* test loadval, output and halt */
+void test_output(Seq_T stream)
+{
+    append(stream, loadval(r1, 65));    
+    append(stream, output(r1));          /* output 'A'*/
+    append(stream, halt());
+}
 
+/* test if successfully halt (not executing anything else), or prints "Bad!" */
 void build_verbose_halt_test(Seq_T stream)
 {
         append(stream, halt());
@@ -195,6 +168,42 @@ void build_verbose_halt_test(Seq_T stream)
         append(stream, output(r1));
 }
 
+/* test conditional move when there's 0 in register c, so the content */
+/* in register b will not be moved to a */
+void cmov0_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 58));
+        append(stream, loadval(r2, 2));
+        append(stream, loadval(r3, 0));
+        append(stream, conditional_move(r1, r2, r3));
+        append(stream, output(r1));
+        append(stream, halt());
+}
+
+/* test conditional move when there's 1 in register c, so the content */
+/* in register b will be moved to a */
+void cmov1_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 58));
+        append(stream, loadval(r2, 59));
+        append(stream, loadval(r3, 1));
+        append(stream, conditional_move(r1, r2, r3));
+        append(stream, output(r1));
+        append(stream, halt());
+}
+
+/* test arith */
+/* test add with a working loadval, output, and halt */
+void add_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 48));
+        append(stream, loadval(r2, 6));
+        append(stream, add(r3, r1, r2));
+        append(stream, output(r3));
+        append(stream, halt());
+}
+
+/* test multiply */
 void multiply_test(Seq_T stream)
 {
         append(stream, loadval(r1, 7));
@@ -204,6 +213,7 @@ void multiply_test(Seq_T stream)
         append(stream, halt());
 }
 
+/* test divide */
 void divide_test(Seq_T stream)
 {
         append(stream, loadval(r1, 99));
@@ -213,14 +223,7 @@ void divide_test(Seq_T stream)
         append(stream, halt());
 }
 
-void print_test(Seq_T stream)
-{
-        append(stream, loadval(r1, 48));
-        append(stream, loadval(r2, 6));
-        append(stream, add(r3, r1, r2));
-        append(stream, output(r3));
-        append(stream, halt());
-}
+/* test nand */
 void nand_test(Seq_T stream)
 {
         append(stream, nand(r1, r2, r2));
@@ -229,5 +232,118 @@ void nand_test(Seq_T stream)
         append(stream, nand(r3, r3, r1));
         append(stream, output(r3));
         append(stream, halt());
+}
 
+/* test combining all the arith */
+void arith_test(Seq_T stream)
+{
+        /* Load r1 = 33, r2 = 3 */
+        append(stream, loadval(r1, 33));                /* r1 = 33 */ 
+        append(stream, loadval(r2, 3));                 /* r2 = 3 */
+
+        /* multiply */
+        append(stream, multiply(r3, r1, r2));             /* r3 = 99 */ 
+        append(stream, output(r3));               /* Output 'c' (ASCII 99) */
+
+        /* divide */
+        append(stream, divide(r3, r3, r2));               /* r3 = 33 */ 
+        append(stream, output(r3));               /* Output '!' (ASCII 33) */
+
+        /* add */
+        append(stream, add(r3, r3, r2));                  /* r3 = 36 */
+        append(stream, output(r3));               /* Output '$' (ASCII 36) */
+
+        /* nand */
+        append(stream, nand(r3, r4, r4));
+        append(stream, nand(r5, r1, r1));
+        append(stream, nand(r5, r3, r5));
+        append(stream, output(r5));
+        append(stream, halt());                     /* Output '!' (ASCII 33) */
+
+        append(stream, halt());
+}
+
+/* test activate */
+void activate_test(Seq_T stream)
+{
+        append(stream, loadval(r3, 10));
+        append(stream, activate(r2, r3));
+        append(stream, loadval(r1, 58));
+        append(stream, add(r1, r1, r2));
+        append(stream, output(r2));
+        append(stream, halt());
+}
+
+/* test sstore with a working activate function */
+void test_sstore(Seq_T stream)
+{
+        append(stream, loadval(r1, 1));       
+        append(stream, activate(r2, 1));      
+
+        append(stream, loadval(r3, 65));      /* r3 = 'A' (ASCII 65) */
+        append(stream, loadval(r4, 0));       
+
+        append(stream, sstore(r2, r4, r3));    /* m[r2][0] = r3 */
+
+        /* We don't output here, just confirm the store runs without failure */
+        append(stream, halt());
+}
+
+/* test sload with a working sstore function */
+void test_sload(Seq_T stream)
+{
+        append(stream, loadval(r1, 1));       
+        append(stream, activate(r2, 1));      
+    
+        append(stream, loadval(r3, 65));      /* r3 = 'A' (ASCII 65) */
+        append(stream, loadval(r4, 0));       
+    
+        append(stream, sstore(r2, r4, r3));    /* m[r2][0] = r3 */
+        append(stream, sload(r5, r2, r4));     /* r5 = m[r2][0] */
+        append(stream, output(r5));                /* output 'A' */
+        append(stream, halt());
+}
+
+/* test inactivate with a working */
+void inactivate_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 33));
+        append(stream, activate(r2, r1));
+        append(stream, loadval(r3, 58));
+        append(stream, loadval(r4, 0));
+        append(stream, sstore(r2, r4, r3));
+
+        append(stream, inactivate(r2));
+
+        append(stream, activate(r2, r1));
+        append(stream, loadval(r6, 66));
+        append(stream, sstore(r2, r4, r6));
+        append(stream, sload(r7, r2, r4));
+        append(stream, output(r7)); /* should print B (ASCII 66) */
+        append(stream, halt());
+}
+
+/* test loadp */
+void loadp_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 58));
+        append(stream, loadval(r2, 10));
+        append(stream, loadval(r3, 0));
+        append(stream, sstore(r3, r2, r1));
+        append(stream, loadp(r2, r3));
+        append(stream, output(r2));
+        append(stream, halt());
+}
+
+
+/* test activate, sload, and sstore */
+void seg_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 58));
+        append(stream, loadval(r3, 10));
+        append(stream, activate(r2, r3));
+        append(stream, sstore(r2, r2, r1));
+        append(stream, sload(r2, r2, r2));
+        append(stream, output(r2));
+        append(stream, halt());
 }
