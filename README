@@ -1,0 +1,128 @@
+Elisa Yu (xyu13) and Cynthia Chao (gchao02)
+Assignment 6 - um
+ 
+Acknowledgements:
+
+    C Interfaces and Implementations by David R. Hanson
+ 
+Architecture:
+
+We implemented:
+um.c           - contains the implementation of um class.
+um.h           - contains three functions that initialize, execute (fetch, 
+                 decode, execute cycle) andt free the memory of um.
+SegMem.c       - contains the impementation of the SegMem class.
+SegMem.h       - contains functions that give access and free each segment and
+                 functions that store or load elements in the segmented memory.
+main.c         - contains a main that passes in the input and output devices 
+                 and calls function in the um class to initialize, execute and
+                 free memory of um. 
+test_main.c    - a testing main used to test for the functions in the SegMem 
+                 class.
+
+Implementation:
+
+    Implemented the whole of the SegMem and um class.  
+    Created a testing main for testing SegMem and um instruction files to test 
+    the completed um. 
+    We expect all implementation to work as expected.
+
+Significant departures from the design doc:
+    - we changed what we used to think about program counter. We realized that
+      it doesn't have to be a pointer, intead we used the index of the inner
+      sequence (the instruction number) of the 0 segment to represent the 
+      program counter
+      
+    - We changed some architectures of SegMem. We changed the next_id to curr_id
+      which would be less confusing to implement and more straightforward. 
+      We added a function in SegMem to get the length of specific segement with
+      segment id for traversing segments in um.c in LOADP instruction
+
+    - Changed the data structure of registers from uarray to sequences, for 
+      easier access and storing of elements.
+
+    - Included much more specific testings for both SegMem and unit testing 
+      instruction files. 
+    
+Time taken UM to execute 50 million instructions, and how do we know:
+
+
+Mentions each UM unit test (from UMTESTS) by name, explaining what each one 
+tests and how:
+
+halt.um             - a halt test with a single halt that makes sure the program
+                      ends with no memory loss.
+
+halt-verbose.um     - test if the halt works successfully to halt the program 
+                      entirely; if it works, it will not print the word "BAD!"
+
+activate.um         - test for the map segment instruction; create a segment 
+                      of 10 elements and check that the id returned is 1 by 
+                      adding the returned value to 58, which gives ; in the 
+                      ASCII table.
+
+cmove0.um           - test cmov instruction when 0 is in $r[C]; load values into
+                      corresponding registers and output the register that is
+                      assigned to assert that no assignment is done.
+
+cmove1.um           - test cmov instruction when 1 is in $r[C]; load values into
+                      corresponding registers and output the register that is
+                      assigned to assert that the cmov performed. 
+
+inactivate.um       - test for the unmap segment instruction; first create a 
+                      segment of 33 elements and store a value 58 in it by using
+                      sstore; then it
+                      inactivates (unmap) the segment that was just created; 
+                      then it activates (map) the same segment again, and 
+                      store a new value 66 in the segment; next, we gets the 
+                      value that was just stored by using sload; finally prints
+                      B, which is the ASCII of the new value 66.
+
+divide.um           - test if add instruction works as instended; if it works,
+                      it will print !
+
+multiply.um         - test if multiply instruction works as instended; 
+                      if it works, it will print 8
+
+print-six.um        - test if add instruction works as instended; if it works,
+                      it will print 6
+
+nand.um             - Populate a resgister with all 1 bits by performing nand on
+                      an empty register. Populate another resgister with the 
+                      reversed bits of unsigned 33. Perform nand on these two 
+                      registers and store in r3. Print r3 and assert that it 
+                      prints !, which is 33 in ASCII.
+
+arith.um            - a test that contains all the arithmatic instructions like
+                      add, multiply, divide, and nand, to see if they can work
+                      well together
+
+seg.um              - Tests for storing and loading in a newly mapped segment; 
+                      create a new segment of 10 elements and store 58 in 
+                      $m[1][1] and load it from the same location and store 
+                      the value retrieved to another unused register. Output 
+                      the register and make sure it prints the ASCII 58, that 
+                      is :
+
+sstore.um           - tests the sstore function (storing element into segmem) 
+                      by calling sstore without outputting anything. Check that
+                      no error is thrown.
+
+sload.um            - after testing sstore, tests sload by calling sload an 
+                      outputting the result. Specifically, we map a new segment 
+                      and store 65 into $m[1][0] and we load it immediately 
+                      into another register and output it. It should print A, 
+                      which is ASCII 65.
+
+times2.um           - Tests for input from I/O device and times the input by 2 
+                      by adding it to itself and output the result. Check if the
+                      output is the same as expected.
+
+times3.um           - Tests for input from I/O device and times the input by 2 
+                      by calling multiply funcition and output the result. 
+                      Check if the output is the same as expected.
+
+
+Hours spent analyzing the assignment: ~ 3 hrs
+Hours spent preparing your design: ~ 5 hrs
+Hours spent solving the problems after your analysis: ~ 7 hrs

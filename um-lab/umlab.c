@@ -304,7 +304,7 @@ void test_sload(Seq_T stream)
         append(stream, halt());
 }
 
-/* test inactivate with a working */
+/* test inactivate with a working sstore and sload */
 void inactivate_test(Seq_T stream)
 {
         append(stream, loadval(r1, 33));
@@ -365,4 +365,11 @@ void times_three_test(Seq_T stream)
         append(stream, output(r4));
         append(stream, halt());
 }
-void 
+void one_million_test(Seq_T stream)
+{
+        append(stream, loadval(r1, 1));
+        for (int i = 0; i < 999998; i++) {
+                append(stream, add(r2, r1, r2));
+        }
+        append(stream, halt());
+}

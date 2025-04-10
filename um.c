@@ -202,5 +202,3 @@ void um_free(UM_T um)
         free(um);
         um = NULL;
 }
-
-

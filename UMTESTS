@@ -1,0 +1,17 @@
+activate.um
+arith.um
+cmove1.um
+halt.um
+inactivate.um
+nand.um
+seg.um
+sstore.um
+add.um
+cmove0.um
+divide.um
+halt-verbose.um
+multiply.um
+print-six.um
+sload.um
+times2.um
+times3.um
