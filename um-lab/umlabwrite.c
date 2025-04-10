@@ -24,6 +24,8 @@ extern void multiply_test(Seq_T stream);
 extern void divide_test(Seq_T stream);
 extern void nand_test(Seq_T stream);
 extern void arith_test(Seq_T stream);
+extern void times_two_test(Seq_T stream);
+extern void times_three_test(Seq_T stream);
 
 
 /* The array `tests` contains all unit tests for the lab. */
@@ -48,8 +50,9 @@ static struct test_info {
         { "inactivate",   NULL, "B", inactivate_test },
         { "arith",        NULL, "c!$!", arith_test},
         { "sstore",       NULL, "",  test_sstore},
-        { "sload",        NULL, "A", test_sload}
-
+        { "sload",        NULL, "A", test_sload},
+        { "times2",        "!", "B", times_two_test},
+        { "times3",        "!", "c", times_three_test}
 };
 
   

@@ -172,10 +172,9 @@ void fetch_decode_execute(UM_T um)
                                 break;
                         }
                 } else {
+                        /* load value case */
                         uint32_t a = Bitpack_getu(instruction, 3, 25);
-                        printf("loadval a: %u\n", a);
                         uint32_t val = Bitpack_getu(instruction, 25, 0);
-                        printf("loadval val: %u\n", val);
                         Seq_put(um->registers, a, (void *)(uintptr_t)val);
                 }
         }

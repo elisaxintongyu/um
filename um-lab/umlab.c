@@ -335,7 +335,6 @@ void loadp_test(Seq_T stream)
         append(stream, halt());
 }
 
-
 /* test activate, sload, and sstore */
 void seg_test(Seq_T stream)
 {
@@ -347,3 +346,23 @@ void seg_test(Seq_T stream)
         append(stream, output(r2));
         append(stream, halt());
 }
+
+/* test adding itself and input */
+void times_two_test(Seq_T stream)
+{
+        append(stream, input(r3));
+        append(stream, add(r4, r3, r3));
+        append(stream, output(r4));
+        append(stream, halt());
+}
+
+/* test mutiplly and input */
+void times_three_test(Seq_T stream)
+{
+        append(stream, input(r3));
+        append(stream, loadval(r2, 3));
+        append(stream, multiply(r4, r2, r3));
+        append(stream, output(r4));
+        append(stream, halt());
+}
+void 
