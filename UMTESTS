@@ -4,9 +4,9 @@ cmove1.um
 halt.um
 inactivate.um
 nand.um
+nand2.um
 seg.um
 sstore.um
-add.um
 cmove0.um
 divide.um
 halt-verbose.um
@@ -15,3 +15,6 @@ print-six.um
 sload.um
 times2.um
 times3.um
+loadp.um
+one-million.um
+loadp2.um

@@ -1,17 +1,22 @@
 /*
  *     SemMem.c
- *     by Elisa and Cynthia, 04/05/2025
+ *     by Elisa and Cynthia, 04/10/2025
  *     Project 6 - um
  *
- *     This class implements the definition of the memthods for the SegMem class
+ *     This class implements the definition of the methods of the SegMem module
+ *     which consists of the next available id, empty id list and the memory
+ *     that is represented by a 2D sequence.
  */
 
 #include "SegMem.h"
+#include "seq.h"
+#include <assert.h>
+
 
 struct SegMem_T {
-        unsigned curr_id;
-        Seq_T empty_id;
-        Seq_T memory;
+        unsigned curr_id; /* the current id of the largest segment id */
+        Seq_T empty_id; /* a sequence of empty segment ids */
+        Seq_T memory; /* the representation of segmented memory */
 };
 
 /* initialize_seg
@@ -159,11 +164,10 @@ void unmap_seg(SegMem_T seg_mem, unsigned index)
 */
 uint32_t seg_load(SegMem_T seg_mem, unsigned segid, unsigned offset)
 {
-        //TESTING: print empty id and curr_id
-        //printf("empty id: %u, curr_id: %u\n", (unsigned)(uintptr_t)Seq_get(seg_mem->empty_id, 0), seg_mem->curr_id);
         assert(seg_mem != NULL);
         Seq_T seg = Seq_get(seg_mem->memory, segid);
         assert(seg != NULL);
+        
         /* get the value at the offset in the segment */
         uint32_t value = (uintptr_t)Seq_get(seg, offset);
         return value;
@@ -218,9 +222,9 @@ uint32_t seg_store(SegMem_T seg_mem, unsigned segid,
 void seg_free(SegMem_T seg_mem)
 {
         assert(seg_mem != NULL);
-
+        int length = Seq_length(seg_mem->memory);
         /* free the mapped segments */
-        for (int i = 0; i < Seq_length(seg_mem->memory); i++) {
+        for (int i = 0; i < length; i++) {
                 Seq_T seg = Seq_get(seg_mem->memory, i);
                 Seq_free(&seg);
         }

@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
     //     fprintf(stderr, "Failed to load value from segment\n");
     //     exit(EXIT_FAILURE);
     // }
-    // printf("Value loaded from segment %u at offset %u: %x\n", segid, offset, value);
+    // printf("Value loaded from segment %u at offset %u: %x\n", segid, offset, 
+    // value);
 
     // Test seg_store
     // unsigned segid = 0;
@@ -78,7 +79,8 @@ int main(int argc, char *argv[])
     //     exit(EXIT_FAILURE);
     // }
     // printf("new_value = %x\n", new_value);
-    // printf("Value stored in segment %u at offset %u: %x (old value: %x)\n", segid, offset, seg_load(seg_mem, 0, 0), old_value);
+    // printf("Value stored in segment %u at offset %u: %x (old value: %x)\n", 
+    // segid, offset, seg_load(seg_mem, 0, 0), old_value);
 
     // Test unmap_seg
     // unsigned segid = 0;

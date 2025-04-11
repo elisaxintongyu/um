@@ -4,19 +4,35 @@ Assignment 6 - um
 Acknowledgements:
 
     C Interfaces and Implementations by David R. Hanson
+    TAs and Piazza are really helpful!
  
 Architecture:
 
 We implemented:
 um.c           - contains the implementation of um class.
-um.h           - contains three functions that initialize, execute (fetch, 
-                 decode, execute cycle) andt free the memory of um.
-SegMem.c       - contains the impementation of the SegMem class.
+um.h           - contains the definition of the um struct (which is a secret to
+                other modules), and the methods 
+                that are used to manipulate the um struct (which can be used 
+                in um module), such as creating a new um, executing 
+                instructions, and freeing the um struct.
+              
+                The um struct contains a segmented memory 
+                (which uses SegMem module), a set of 
+                registers, and program counter. 
+                This class also handles I/O operations, such as reading from 
+                input and writing to output.
+
+SegMem.c       - contains the impementation of the SegMem module.
+                 Contains the SegMem struct that is hidden from client. 
 SegMem.h       - contains functions that give access and free each segment and
-                 functions that store or load elements in the segmented memory.
-main.c         - contains a main that passes in the input and output devices 
+                 functions that store or load elements in the segmented memory,
+                 which is used in the um module
+
+main.c         - the driver module that contains a main that passes in the 
+                 input and output devices 
                  and calls function in the um class to initialize, execute and
                  free memory of um. 
+                 
 test_main.c    - a testing main used to test for the functions in the SegMem 
                  class.
 
@@ -45,6 +61,16 @@ Significant departures from the design doc:
       instruction files. 
     
 Time taken UM to execute 50 million instructions, and how do we know:
+
+    We measured the time taken to execute 1 million instructions and times it 
+    by 50. We did this by creating a file containing 1 million instructions and 
+    timed the program using the time executable. 
+
+    Time to execute one million instructions:
+    0.230u 0.001s 0:00.23 100.0%    0+0k 0+0io 0pf+0w
+
+    Time to execute 50 million instructions:
+    0.23 * 50 = 11.5 seconds 
 
 
 Mentions each UM unit test (from UMTESTS) by name, explaining what each one 
@@ -77,15 +103,24 @@ inactivate.um       - test for the unmap segment instruction; first create a
                       store a new value 66 in the segment; next, we gets the 
                       value that was just stored by using sload; finally prints
                       B, which is the ASCII of the new value 66.
+                        Activate and stores 'A', unmaps the segment
+                        Reactivates and stores 'B', then reads and outputs it
+                      The final output is 'B'.
 
 divide.um           - test if add instruction works as instended; if it works,
-                      it will print !
+                      it will print '!'
+                      Divides 99 / 3 = 33 into r3
+                      Outputs r3: '!'
 
 multiply.um         - test if multiply instruction works as instended; 
                       if it works, it will print 8
+                      Multiplies 7 × 8 = 56 into r3
+                      Outputs r3: '8'
 
 print-six.um        - test if add instruction works as instended; if it works,
                       it will print 6
+                      Adds 48 + 6 = 54, stores in r3
+                      Outputs r3: '6' 
 
 nand.um             - Populate a resgister with all 1 bits by performing nand on
                       an empty register. Populate another resgister with the 
@@ -93,9 +128,26 @@ nand.um             - Populate a resgister with all 1 bits by performing nand on
                       registers and store in r3. Print r3 and assert that it 
                       prints !, which is 33 in ASCII.
 
+nand2.um            - This test verifies the behavior of the NAND instruction
+                      and demonstrates unsigned 32-bit integer overflow. 
+                      It begins by computing ~(0 & 0) using NAND
+                      , resulting in 0xFFFFFFFF, 
+                      then adds 49 to it. Due to overflow, 0xFFFFFFFF + 49 wraps
+                      around to 48, which is the ASCII code for '0'. The program
+                      then outputs this value, confirming that NAND combined 
+                      with overflow arithmetic can be used to construct 
+                      printable ASCII characters from bitwise operations. 
+                      The expected output is the character '0'.                
+
 arith.um            - a test that contains all the arithmatic instructions like
                       add, multiply, divide, and nand, to see if they can work
                       well together
+                      	•	Multiply: 33 × 3 = 99 -> 'c'
+                        •	Divide: 99 / 3 = 33 -> '!'
+                        •	Add: 33 + 3 = 36 -> '$'
+                        •	NAND: ~(0&0) = all 1s; 
+                        reverse twice of 33, which goes back to original ->'!'
+                      Outputs 'c!$!' 
 
 seg.um              - Tests for storing and loading in a newly mapped segment; 
                       create a new segment of 10 elements and store 58 in 
@@ -122,6 +174,21 @@ times3.um           - Tests for input from I/O device and times the input by 2
                       by calling multiply funcition and output the result. 
                       Check if the output is the same as expected.
 
+one-million.um      - Have exactly one million instructions for timing purpose.
+
+loadp.um            - Tests for load program instruction. Contains five loadval
+                      to r1 and output pairs, printing ASCIIs from 53 to 49 
+                      (corresponding to characters 5 to 1). There is a load 
+                      program instruction after the first pair that jumps to 
+                      the start of the last pair. So the program prints out 
+                      characters 5 and 1, skipping the instructions between 
+                      them.
+
+loadp2.um           - This also tests the load program instruction. We store 
+                      halt instruction, the 9th instruction in the 0 segment, in
+                      the 0th instruction of the newly mapped segment by using 
+                      activate (map segment instruction). Then use segment 1 to
+                      replace segment 0, which will execute halt
 
 Hours spent analyzing the assignment: ~ 3 hrs
 Hours spent preparing your design: ~ 5 hrs

@@ -23,9 +23,16 @@ extern void seg_test(Seq_T stream);
 extern void multiply_test(Seq_T stream);
 extern void divide_test(Seq_T stream);
 extern void nand_test(Seq_T stream);
+extern void nand_test2(Seq_T stream);
+extern void loadp_test(Seq_T stream);
+extern void loadp_test1(Seq_T stream);
+
+
 extern void arith_test(Seq_T stream);
+
 extern void times_two_test(Seq_T stream);
 extern void times_three_test(Seq_T stream);
+extern void one_million_test(Seq_T stream);
 
 
 /* The array `tests` contains all unit tests for the lab. */
@@ -42,17 +49,21 @@ static struct test_info {
         { "print-six",    NULL, "6", add_test },
         { "cmove0",       NULL, ":", cmov0_test },
         { "cmove1",       NULL, ";", cmov1_test },
-        { "activate",     NULL, ";", activate_test }, 
+        { "activate",     NULL, "", activate_test }, 
         { "seg",          NULL, ":", seg_test }, 
         { "multiply",     NULL, "8", multiply_test },
         { "divide",       NULL, "!", divide_test },
         { "nand",         NULL, "!", nand_test },
+        { "nand2",        NULL, "0", nand_test2 },
         { "inactivate",   NULL, "B", inactivate_test },
-        { "arith",        NULL, "c!$!", arith_test},
-        { "sstore",       NULL, "",  test_sstore},
-        { "sload",        NULL, "A", test_sload},
-        { "times2",        "!", "B", times_two_test},
-        { "times3",        "!", "c", times_three_test}
+        { "arith",        NULL, "c!$!", arith_test },
+        { "sstore",       NULL, "",  test_sstore },
+        { "sload",        NULL, "A", test_sload },
+        { "times2",        "!", "B", times_two_test },
+        { "times3",        "!", "c", times_three_test },
+        { "one-million",  NULL, "", one_million_test },
+        { "loadp",        NULL, "51", loadp_test },
+        { "loadp2",       NULL, "", loadp_test1 }
 };
 
   

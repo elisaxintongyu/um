@@ -233,6 +233,18 @@ void nand_test(Seq_T stream)
         append(stream, output(r3));
         append(stream, halt());
 }
+/* test nand */
+void nand_test2(Seq_T stream)
+{
+        append(stream, nand(r1, r2, r2));
+
+        /* +1 causes overflow, so it all 0s, + 48 makes it visible */
+        append(stream, loadval(r4, 49)); 
+        append(stream, add(r5, r1, r4)); 
+
+        append(stream, output(r5)); /* Output '0' */
+        append(stream, halt());
+}
 
 /* test combining all the arith */
 void arith_test(Seq_T stream)
@@ -326,14 +338,36 @@ void inactivate_test(Seq_T stream)
 /* test loadp */
 void loadp_test(Seq_T stream)
 {
-        append(stream, loadval(r1, 58));
+        append(stream, loadval(r1, 53));
+        append(stream, output(r1));
         append(stream, loadval(r2, 10));
-        append(stream, loadval(r3, 0));
-        append(stream, sstore(r3, r2, r1));
-        append(stream, loadp(r2, r3));
-        append(stream, output(r2));
+        append(stream, loadp(0, r2));
+        append(stream, loadval(r1, 52));
+        append(stream, output(r1));
+        append(stream, loadval(r1, 51));
+        append(stream, output(r1));
+        append(stream, loadval(r1, 50));
+        append(stream, output(r1));
+        append(stream, loadval(r1, 49));
+        append(stream, output(r1));
         append(stream, halt());
 }
+
+void loadp_test1(Seq_T stream)
+{
+        append(stream, loadval(r1, 8));
+        append(stream, loadval(r2, 0));
+        append(stream, loadval(r3, 0));
+        append(stream, loadval(r6, 9));
+        append(stream, loadval(r7, 1));
+        append(stream, activate(r2, r1));
+        append(stream, sload(r5, r3, r6));
+        append(stream, sstore(r2, r3, r5));
+        append(stream, loadp(r2, r3));
+        append(stream, halt());
+
+}
+
 
 /* test activate, sload, and sstore */
 void seg_test(Seq_T stream)

@@ -1,22 +1,19 @@
 /*
  *     SemMem.h
- *     by Elisa and Cynthia, 04/05/2025
+ *     by Elisa and Cynthia, 04/10/2025
  *     Project 6 - um
  *
- *     This class implements the memthods for the SegMem class, which cosists 
+ *     Declarations for the SegMem module, which cosists 
  *     the next available id, empty id list and the memory itself. This class 
  *     allows for modification and loading of each segments, as well as the 
- *     elements stored in it. A 2D sequence is used for memory storage.
+ *     elements stored in it.
  */
 #ifndef SEGMEM_INCLUDED 
 #define SEGMEM_INCLUDED
 
 #include <stdlib.h>
-#include "seq.h"
-#include <bitpack.h>
 #include <stdio.h>
-#include <assert.h>
-#include "set.h"
+#include <bitpack.h>
 
 #define T SegMem_T
 typedef struct T *T;
@@ -24,7 +21,7 @@ typedef struct T *T;
 
 T initialize_segmem();
 
-void populate_seg(SegMem_T seg_mem, FILE *instructions);
+void populate_seg(T seg_mem, FILE *instructions);
 
 unsigned map_seg(T seg_mem, unsigned num_words);
 
